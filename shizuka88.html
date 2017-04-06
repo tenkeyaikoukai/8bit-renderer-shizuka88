@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>画像処理</title>
+
+</head>
+<body>
+  <canvas id="c1" width="600" height="300"></canvas><br />
+<form name="f1"><input type="textbox" name="t1"><input type="button" value="8colors" onclick="color8();"><input type="button" value="64colors" onclick="color64();"><input type="button" value="full color" oncilck="ldimg();"></form>
+<script type="text/javascript">
+ function color8(){
+    var canvas = document.getElementById("c1");
+    var ctx = canvas.getContext("2d");
+
+    var img = new Image();
+    img.src = document.forms.f1.t1.value;
+    img.onload = function() {
+        ctx.drawImage(img, 0, 0);
+        var src = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var dst = ctx.createImageData(canvas.width, canvas.height);
+
+        //ネガポジ変換
+        for (var i = 0; i < src.data.length; i++) { 
+
+            if(src.data[i*4]<130){dst.data[i*4]=0;}
+            if(src.data[i*4]>=130){dst.data[i*4]=200;}
+
+            if(src.data[i*4+1]<130){dst.data[i*4+1]=0;}
+            if(src.data[i*4+1]>=130){dst.data[i*4+1]=200;}
+
+            if(src.data[i*4+2]<130){dst.data[i*4+2]=0;}
+            if(src.data[i*4+2]>=130){dst.data[i*4+2]=200;}
+
+ 
+           dst.data[i*4+3] = src.data[i*4+3];        //A
+        }
+
+        ctx.putImageData(dst, 0, 0);
+};    }
+function color64() {
+    var canvas = document.getElementById("c1");
+    var ctx = canvas.getContext("2d");
+
+    var img = new Image();
+    img.src = document.forms.f1.t1.value;
+    img.onload = function() {
+        ctx.drawImage(img, 0, 0);
+        var src = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var dst = ctx.createImageData(canvas.width, canvas.height);
+
+        //ネガポジ変換
+        var count=0;
+        var signflag=1;
+        for (var i = 0; i < src.data.length; i++) { 
+        count++;
+        if(count==600){signflag=-signflag;count=0;}
+            if(src.data[i*4]<100){dst.data[i*4]=0;}
+            if(src.data[i*4]>=100 && src.data[i*4]<150){dst.data[i*4]=80;}
+            if(src.data[i*4]>=150 && src.data[i*4]<200){dst.data[i*4]=160;}
+            if(src.data[i*4]>=200){dst.data[i*4]=240;}
+
+            if(src.data[i*4+1]<100){dst.data[i*4+1]=0;}
+            if(src.data[i*4+1]>=100 && src.data[i*4+1]<150){dst.data[i*4+1]=80;}
+            if(src.data[i*4+1]>=150 && src.data[i*4+1]<200){dst.data[i*4+1]=160;}
+            if(src.data[i*4+1]>=200){dst.data[i*4+1]=240;}
+
+            if(src.data[i*4+2]<100){dst.data[i*4+2]=0;}
+            if(src.data[i*4+2]>=100 && src.data[i*4+2]<150){dst.data[i*4+2]=80;}
+            if(src.data[i*4+2]>=150 && src.data[i*4+2]<200){dst.data[i*4+2]=160;}
+            if(src.data[i*4+2]>=200){dst.data[i*4+2]=240;}
+
+ 
+           dst.data[i*4+3] = src.data[i*4+3];        //A
+           if(i%2==0 & signflag==1 || i%2!=0 & signflag==-1){dst.data[i*4]=dst.data[i*4+1]=dst.data[i*4+2]=0;} 
+       }
+
+        ctx.putImageData(dst, 0, 0);
+};    }
+ function ldimg(){
+    var canvas = document.getElementById("c1");
+    var ctx = canvas.getContext("2d");
+
+    var img = new Image();
+    img.src = document.forms.f1.t1.value;
+    ctx.drawImage(img,0,0);
+
+} 
+</script>
+</body>
+</html>
