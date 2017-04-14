@@ -6,7 +6,8 @@
 </head>
 <body>
   <canvas id="c1" width="600" height="300"></canvas><br />
-<form name="f1"><input type="textbox" name="t1"><input type="button" value="8colors" onclick="color8();"><input type="button" value="64colors" onclick="color64();"><input type="button" value="full color" oncilck="ldimg();"></form>
+<form name="f1"><input type="textbox" name="t1"><input type="button" value="8colors" onclick="color8();"><input type="button" value="64colors" onclick="color64();"><input type="button" value="full color" onclick="fullcolor();"></form>
+<div id="test"></div>
 <script type="text/javascript">
  function color8(){
     var canvas = document.getElementById("c1");
@@ -76,15 +77,34 @@ function color64() {
 
         ctx.putImageData(dst, 0, 0);
 };    }
- function ldimg(){
+function fullcolor(){
     var canvas = document.getElementById("c1");
     var ctx = canvas.getContext("2d");
 
     var img = new Image();
     img.src = document.forms.f1.t1.value;
-    ctx.drawImage(img,0,0);
+    img.onload = function() {
+        ctx.drawImage(img, 0, 0);
 
-} 
+        var src = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var dst = ctx.createImageData(canvas.width, canvas.height);
+
+        //ƒlƒKƒ|ƒW•ÏŠ·
+        var count=0;
+        var signflag=1;
+        for (var i = 0; i < src.data.length; i++) { 
+            dst.data[i*4] = src.data[i*4];        //A
+           dst.data[i*4+1] = src.data[i*4+1];        //A
+           dst.data[i*4+2] = src.data[i*4+2];        //A
+
+           dst.data[i*4+3] = src.data[i*4+3];        //A
+  
+       }
+        ctx.putImageData(dst, 0, 0);
+
+
+}; }
+ 
 </script>
 </body>
 </html>
